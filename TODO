@@ -1,0 +1,44 @@
+TODO:
+Figure out how Vipan and Spyken are doing this whole schedule thing
+
+Settings menu
+	Menu
+	|
+	|_Skola
+	|	|
+	|	|_Katte
+	|	|	|_set id=NNNNN
+	|	|	|_set |passwd
+	|	|		|_Enable passwd field
+	|	|_Polhem
+	|	|	|_set id=NNNNN
+	|	|	|_set code=NNNNN
+	|	|
+	|	|_Vipan
+	|	|	|_TODO
+	|	|
+	|	|_Spyken
+	|		|_TODO
+	|
+	|_Personnummer
+	|		|
+	|		|_text or int
+	|
+	|_Lösenord (if Katte is selected)
+	|	|
+	|	|_text
+	|
+	|_Vecka
+	|	|
+	|	|_Denna veckan
+	|	|		|_Current week
+	|	|
+	|	|_int that is less or equal to 51 (no school week 51 ;) )
+	|	|
+	|	|_Empties the period option
+	|
+	|_Period
+		|
+		|_1 or 2
+
+Fancy pantz GUI
