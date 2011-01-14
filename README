@@ -10,8 +10,6 @@ Some schools, like Polhem, got the &code=[the code] after the school id.
 
 we want this persons schedule 
 id=YYMMNN-NNNN
-some schools, like katte, got passwords so you have to edit that line like this
-id=YYMMNN-NNNN|password
 
 The rest is self-explanatory.
 
