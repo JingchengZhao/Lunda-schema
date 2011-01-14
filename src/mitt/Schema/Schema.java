@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 public class Schema extends Activity {
-	private static final String TAG = "Schema";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +22,6 @@ public class Schema extends Activity {
         ImageView imageView = (ImageView) findViewById(R.id.ImageView01);
         Drawable drawable = getIt(site);
         imageView.setImageDrawable(drawable);
-		
     }
 
     private Drawable getIt(String url)
