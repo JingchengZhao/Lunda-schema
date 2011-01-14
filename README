@@ -10,6 +10,8 @@ Some schools, like Polhem, got the &code=[the code] after the school id.
 
 we want this persons schedule 
 id=YYMMNN-NNNN
+Katte requires that one password.
+add |password after NNNN
 
 The rest is self-explanatory.
 

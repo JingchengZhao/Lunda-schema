@@ -33,12 +33,11 @@ Settings menu
 	|	|_Denna veckan
 	|	|		|_Current week
 	|	|
-	|	|_int that is less or equal to 51 (no school week 51 ;) )
-	|	|
 	|	|_Empties the period option
 	|
 	|_Period
 		|
 		|_1 or 2
 
-Fancy pantz GUI
+Figure out what week system to use; either ISO or Gregorian.
+Launcher Icon
