@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import java.util.Calendar;
 
 public class Schema extends Activity {
 	@Override
@@ -15,14 +16,20 @@ public class Schema extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-		SharedPreferences settings = getSharedPreferences("schoolId", 0);
+		SharedPreferences settings = getSharedPreferences("Schema", 0);
 		String schoolId = settings.getString("schoolId", "19400");
 		
-		String site = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?schoolid=" + schoolId + "&id=930131-3939&period=&week=3&maxwidth=545&maxheight=253&width=545&height=253";
+		String site = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?schoolid=" + schoolId + "&id=930131-3939&period=&week=" + weekNumber() + "&maxwidth=200&maxheight=500&width=200&height=500";
         ImageView imageView = (ImageView) findViewById(R.id.ImageView01);
         Drawable drawable = getIt(site);
         imageView.setImageDrawable(drawable);
     }
+	private int weekNumber() {
+		Calendar current = Calendar.getInstance();
+		int week = current.get(Calendar.WEEK_OF_YEAR);
+		week = week - 1;
+		return week;
+	}
 
     private Drawable getIt(String url)
     {
