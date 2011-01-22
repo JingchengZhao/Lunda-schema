@@ -2,34 +2,69 @@ package mitt.Schema;
 
 import java.io.InputStream;
 import java.net.URL;
+
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.text.format.Time;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.ImageView;
 
 public class Schema extends Activity {
+	protected static final String TAG = "moo";
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		SharedPreferences settings = getSharedPreferences("Schema", 0);
-		String schoolId = settings.getString("schoolId", "19400");
-		String id = settings.getString("id", "930131-3939");
-		String password = settings.getString("password", "|h%C3%B6st*********");
-		String period = settings.getString("period", "2");
+		ImageView imageView = (ImageView) findViewById(R.id.schedulePic);
+		Drawable drawable = getIt(urlMaker());
+		imageView.setImageDrawable(drawable);
+	}
 
-		StringBuilder siteStringBuilder = new StringBuilder("http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?schoolid=");
-		siteStringBuilder.append(schoolId);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.changeSchool:
+			quit();
+			return true;
+		case R.id.changePass:
+			quit();
+			return true;
+		case R.id.changeId:
+			quit();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private boolean quit() {
+		return true;
+	}
+
+	private String urlMaker() {
+		SharedPreferences settings = getSharedPreferences("Schema", 0);
+
+		StringBuilder siteStringBuilder = new StringBuilder(
+				"http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=");
+		siteStringBuilder.append(settings.getString("schoolId", "19400"));
 		siteStringBuilder.append("&id=");
-		siteStringBuilder.append(id);
-		siteStringBuilder.append(password);
+		siteStringBuilder.append(settings.getString("id", "930131-3939"));
+		siteStringBuilder.append(settings.getString("password", "|h%C3%B6stkyla"));
 		siteStringBuilder.append("&period=");
-		siteStringBuilder.append(period);
+		siteStringBuilder.append(settings.getString("period", "2"));
 		siteStringBuilder.append("&week=");
 		siteStringBuilder.append("&maxwidth=");
 		siteStringBuilder.append(maxWidth());
@@ -41,9 +76,7 @@ public class Schema extends Activity {
 		siteStringBuilder.append(maxHeight());
 
 		String site = siteStringBuilder.toString();
-		ImageView imageView = (ImageView) findViewById(R.id.ImageView01);
-		Drawable drawable = getIt(site);
-		imageView.setImageDrawable(drawable);
+		return site;
 	}
 
 	private int maxWidth() {
@@ -55,6 +88,7 @@ public class Schema extends Activity {
 	private int maxHeight() {
 		Display sizz = getWindowManager().getDefaultDisplay();
 		int height = sizz.getHeight();
+		height = height + 300;
 		return height;
 	}
 
@@ -66,7 +100,7 @@ public class Schema extends Activity {
 		}
 
 		catch (Exception exception) {
-			System.out.println("Exc="+exception);
+			System.out.println("Exc=" + exception);
 			return null;
 		}
 	}

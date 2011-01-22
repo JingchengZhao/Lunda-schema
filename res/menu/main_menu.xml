@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item 
+		android:id="@+id/changeSchool"
+		android:title="Byt Skola" />
+	<item 
+		android:id="@+id/changePass"
+		android:title="Byt Lösenord" />
+	<item 
+		android:id="@+id/changeId"
+		android:title="Byt ID" />
+</menu>
