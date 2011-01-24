@@ -12,5 +12,9 @@
 			android:layout_height="fill_parent" 
 			android:id="@+id/schedulePic" >
 		</ImageView>
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/txt" >
+		</TextView>
 	</LinearLayout>
 </ScrollView>

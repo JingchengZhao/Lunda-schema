@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.net.URL;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,7 +14,9 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Schema extends Activity {
 	protected static final String TAG = "moo";
@@ -37,7 +42,17 @@ public class Schema extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.changeSchool:
-			quit();
+			final String[] schools = new String []{"Katte", "Polhem"};
+			AlertDialog.Builder chooseSchool = new AlertDialog.Builder(this);
+			chooseSchool.setTitle("Välj skola");
+			chooseSchool.setItems(schools, new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					TextView txt = (TextView) findViewById(R.id.txt);
+					txt.setText(items[which]);
+				}
+			}); 
+			chooseSchool.show();
 			return true;
 		case R.id.changePass:
 			quit();
