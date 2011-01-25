@@ -45,20 +45,23 @@ public class Schema extends Activity {
 			final String[] schools = new String []{"Katte", "Polhem"};
 			AlertDialog.Builder chooseSchool = new AlertDialog.Builder(this);
 			chooseSchool.setTitle("Välj skola");
-			chooseSchool.setItems(schools, new OnClickListener() {
-				@Override
+			/*			chooseSchool.setItems(schools, new OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					TextView txt = (TextView) findViewById(R.id.txt);
-					txt.setText(items[which]);
+					TextView textView = (TextView) findViewById(R.id.txt);
+					textView.setText(items[which]);
 				}
-			}); 
+				}); */
 			chooseSchool.show();
 			return true;
 		case R.id.changePass:
-			quit();
+			AlertDialog.Builder changePass = new AlertDialog.Builder(this);
+			changePass.setTitle("Byt lösenord");
+			changePass.show();
 			return true;
 		case R.id.changeId:
-			quit();
+			AlertDialog.Builder changeId = new AlertDialog.Builder(this);
+			changeId.setTitle("Byt ID");
+			changeId.show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
