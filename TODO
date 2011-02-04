@@ -1,4 +1,9 @@
 TODO:
+Prio 1:
+Fix week number instead of period number!
+Save local copy of schedule
+
+Prio undef:
 Figure out how Vipan and Spyken are doing this whole schedule thing
 
 Settings menu
@@ -39,5 +44,4 @@ Settings menu
 		|
 		|_1 or 2
 
-Figure out what week system to use; either ISO or Gregorian.
 Launcher Icon
