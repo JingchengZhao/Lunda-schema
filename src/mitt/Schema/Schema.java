@@ -64,7 +64,6 @@ public class Schema extends Activity {
 						}
 						else if(school==1) {
 							editor.putString("schoolId", "18600&code=91094");
-							editor.putString("id", "{5B7E01D2-49E1-4321-AA7A-3D43D07E4E62}");
 							editor.putString("period", "P2");
 							editor.commit();
 							image();
@@ -115,8 +114,6 @@ public class Schema extends Activity {
 				});
 
 			changeId.show();
-			return true;
-		case R.id.quit:
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
