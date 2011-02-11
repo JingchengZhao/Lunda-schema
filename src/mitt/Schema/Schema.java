@@ -2,6 +2,7 @@ package mitt.Schema;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -58,13 +59,11 @@ public class Schema extends Activity {
 					public void onClick(DialogInterface dialog, int school) {
 						if(school==0) {
 							editor.putString("schoolId", "19400");
-							editor.putString("period", "2");
 							editor.commit();
 							image();
 						}
 						else if(school==1) {
 							editor.putString("schoolId", "18600&code=91094");
-							editor.putString("period", "P2");
 							editor.commit();
 							image();
 						}
@@ -127,10 +126,11 @@ public class Schema extends Activity {
 		siteStringBuilder.append(settings.getString("schoolId", "19400"));
 		siteStringBuilder.append("&id=");
 		siteStringBuilder.append(settings.getString("id", "{5363F05C-349F-4AF9-9AA9-55A48A3B628D}|h%C3%B6stkyla"));
-		//siteStringBuilder.append(settings.getString("password", "|h%C3%B6stkyla"));
 		siteStringBuilder.append("&period=");
-		siteStringBuilder.append(settings.getString("period", "2"));
 		siteStringBuilder.append("&week=");
+		Calendar getWeekNumber = Calendar.getInstance();
+		int currentWeekNumber = getWeekNumber.get(3);
+		siteStringBuilder.append(currentWeekNumber);
 		siteStringBuilder.append("&maxwidth=");
 		siteStringBuilder.append(maxWidth());
 		siteStringBuilder.append("&maxheight=");
