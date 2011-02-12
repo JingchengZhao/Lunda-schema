@@ -68,7 +68,9 @@ public class Schema extends Activity {
 							image();
 						}
 						else if(school==2) {
-							Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+							editor.putInt("school", 2);
+							editor.commit();
+							image();
 						}
 						else if(school==3) {
 							Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
@@ -160,6 +162,16 @@ public class Schema extends Activity {
 				});
 			choosePeriod.show();
 			return true;
+		case R.id.about:
+			AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
+			aboutBuilder.setTitle("Om");
+			aboutBuilder.setMessage("Skapad av Patrik 'Sikevux' Greco");
+			aboutBuilder.setNegativeButton("Tillbaka", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+					}
+				});
+			aboutBuilder.show();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -178,6 +190,9 @@ public class Schema extends Activity {
 		else if(school == 1) {
 			siteStringBuilder.append("18600");
 		}
+		else if(school == 2) {
+			siteStringBuilder.append("26900");
+		}
 		siteStringBuilder.append("&id=");
 		siteStringBuilder.append(settings.getString("id", "{5363F05C-349F-4AF9-9AA9-55A48A3B628D}|h%C3%B6stkyla"));
 		siteStringBuilder.append("&period=");
@@ -185,7 +200,7 @@ public class Schema extends Activity {
 			if(school == 0) {
 				siteStringBuilder.append(String.valueOf(settings.getInt("period", 0)));
 			}
-			else if(school == 1) {
+			else {
 				siteStringBuilder.append("P" + String.valueOf(settings.getInt("period", 0)));
 			}
 
