@@ -9,4 +9,10 @@
 	<item 
 		android:id="@+id/changeId"
 		android:title="Byt ID" />
+	<item 
+		android:id="@+id/changeWeek"
+		android:title="Byt Vecka" />
+	<item 
+		android:id="@+id/changePeriod"
+		android:title="Byt Period" />
 </menu>

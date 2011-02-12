@@ -58,12 +58,12 @@ public class Schema extends Activity {
 			chooseSchool.setItems(schools, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int school) {
 						if(school==0) {
-							editor.putString("schoolId", "19400");
+							editor.putInt("school", 0);
 							editor.commit();
 							image();
 						}
 						else if(school==1) {
-							editor.putString("schoolId", "18600&code=91094");
+							editor.putInt("school", 1);
 							editor.commit();
 							image();
 						}
@@ -114,23 +114,90 @@ public class Schema extends Activity {
 
 			changeId.show();
 			return true;
+		case R.id.changeWeek:
+			final EditText weekEditInput = new EditText(this);
+            AlertDialog.Builder changeWeek = new AlertDialog.Builder(this);
+            changeWeek.setTitle("Byt Vecka");
+            changeWeek.setMessage("0=Denna veckan");
+            changeWeek.setView(weekEditInput);
+            changeWeek.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String weekSettingValue = weekEditInput.getText().toString();
+                        editor.putInt("week", Integer.parseInt(weekSettingValue));
+                        editor.commit();
+                        image();
+                    }
+                });
+            changeWeek.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+
+            changeWeek.show();
+            return true;
+		case R.id.changePeriod:
+			final CharSequence[] periods = {"Använd Veckor", "Period 1", "Period 2"};
+			AlertDialog.Builder choosePeriod = new AlertDialog.Builder(this);
+			choosePeriod.setTitle("Välj period");
+			choosePeriod.setItems(periods, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int period) {
+						if(period == 0) {
+							editor.putInt("period", 0);
+							editor.commit();
+							image();
+						}
+						else if(period == 1) {
+							editor.putInt("period", 1);
+							editor.commit();
+							image();
+						}
+						else if(period == 2) {
+							editor.putInt("period", 2);
+							editor.commit();
+							image();
+						}
+					}
+				});
+			choosePeriod.show();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	public final Calendar getWeekNumber = Calendar.getInstance();
+
 	private String urlMaker() {
 		SharedPreferences settings = getSharedPreferences("Schema", 0);
+		int school = settings.getInt("school", 0);
 		StringBuilder siteStringBuilder = new StringBuilder(
 				"http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=");
-		siteStringBuilder.append(settings.getString("schoolId", "19400"));
+		if(school == 0) {
+			siteStringBuilder.append("19400");
+		}
+		else if(school == 1) {
+			siteStringBuilder.append("18600");
+		}
 		siteStringBuilder.append("&id=");
 		siteStringBuilder.append(settings.getString("id", "{5363F05C-349F-4AF9-9AA9-55A48A3B628D}|h%C3%B6stkyla"));
 		siteStringBuilder.append("&period=");
+		if(settings.getInt("period", 0) != 0) {
+			if(school == 0) {
+				siteStringBuilder.append(String.valueOf(settings.getInt("period", 0)));
+			}
+			else if(school == 1) {
+				siteStringBuilder.append("P" + String.valueOf(settings.getInt("period", 0)));
+			}
+
+		}
 		siteStringBuilder.append("&week=");
-		Calendar getWeekNumber = Calendar.getInstance();
-		int currentWeekNumber = getWeekNumber.get(3);
+		if(settings.getInt("period", 0) == 0) {
+			int currentWeekNumber = getWeekNumber.get(3);
+			if(settings.getInt("week", 0) != 0) {
+			currentWeekNumber = settings.getInt("week", 0);
+			}
 		siteStringBuilder.append(currentWeekNumber);
+		}
 		siteStringBuilder.append("&maxwidth=");
 		siteStringBuilder.append(maxWidth());
 		siteStringBuilder.append("&maxheight=");
