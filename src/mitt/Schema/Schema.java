@@ -17,28 +17,29 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View.OnClickListener;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class Schema extends Activity {
-
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		image();
 	}
-	
+
 	public void image() {
-		ImageView imageView = (ImageView) findViewById(R.id.schedulePic);
-		Drawable drawable = getIt(urlMaker());
-		imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		imageView.setAdjustViewBounds(true);
-		imageView.setImageDrawable(drawable);
+		WebView webView = (WebView) findViewById(R.id.webview);
+		WebSettings webSettings = webView.getSettings();
+        webSettings.setSupportZoom(true);
+		webSettings.setBuiltInZoomControls(true); 
+		webView.loadUrl(urlMaker());
 	}
-		
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -227,14 +228,15 @@ public class Schema extends Activity {
 	}
 
 	private int maxWidth() {
-		Display sieez = getWindowManager().getDefaultDisplay();
-		int width = sieez.getWidth();
+		Display getWidth = getWindowManager().getDefaultDisplay();
+		int width = getWidth.getWidth();
+		width = width + 150;
 		return width;
 	}
 
 	private int maxHeight() {
-		Display sizz = getWindowManager().getDefaultDisplay();
-		int height = sizz.getHeight();
+		Display getHeight = getWindowManager().getDefaultDisplay();
+		int height = getHeight.getHeight();
 		height = height + 300;
 		return height;
 	}

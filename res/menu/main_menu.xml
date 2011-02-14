@@ -15,4 +15,7 @@
 	<item 
 		android:id="@+id/changePeriod"
 		android:title="Byt Period" />
+	<item 
+		android:id="@+id/about"
+		android:title="Om" />
 </menu>
