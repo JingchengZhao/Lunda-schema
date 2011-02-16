@@ -27,9 +27,9 @@ Use is subject to license terms.
 	<item 
 		android:id="@+id/changeSchool"
 		android:title="Byt Skola" />
-	<item 
+<!--	<item 
 		android:id="@+id/changePass"
-		android:title="Byt Lösenord" />
+		android:title="Byt Lösenord" /> -->
 	<item 
 		android:id="@+id/changeId"
 		android:title="Byt ID" />
@@ -42,4 +42,8 @@ Use is subject to license terms.
 	<item 
 		android:id="@+id/about"
 		android:title="Om" />
+	<item 
+		android:id="@+id/license"
+		android:title="License" />
+
 </menu>

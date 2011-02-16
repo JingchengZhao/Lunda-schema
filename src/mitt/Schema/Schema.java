@@ -126,7 +126,7 @@ public class Schema extends Activity {
 		chooseSchool.show();
 	}
 
-	public void changePass() {
+   	public void changePass() {
 		final SharedPreferences settings = getSharedPreferences("Schema", 0);
 		final SharedPreferences.Editor editor = settings.edit();
 		final EditText passwordEditInput = new EditText(this);
@@ -143,7 +143,7 @@ public class Schema extends Activity {
 				}
 			});
 		changePass.show();
-	}
+		}
 
 	public void changeId() {
 		final SharedPreferences settings = getSharedPreferences("Schema", 0);
@@ -230,14 +230,30 @@ public class Schema extends Activity {
 		aboutBuilder.show();
 	}
 
+	public void license() {
+		AlertDialog.Builder licenseBuilder = new AlertDialog.Builder(this);
+		licenseBuilder.setTitle("License");
+		licenseBuilder.setMessage("Copyright 2011 Patrik Greco All rights reserved.\nUse is subject to license terms.\nA copy of the license can be retrived at http://dev.sikevux.se/LICENSE.txt");
+		licenseBuilder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			}
+		});
+		licenseBuilder.show();
+	}
+
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.changeSchool:
 			changeSchool();
 			return true;
-		case R.id.changePass:
+			/*		case R.id.changePass:
 			changePass();
+			license();
+			return true;*/
+		case R.id.license:
+			license();
 			return true;
 		case R.id.changeId:
 			changeId();
