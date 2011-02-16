@@ -5,5 +5,12 @@
 	<WebView android:id="@+id/webview"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent" />
+	<ScrollView android:id="@+id/scroll"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" >
+		<ImageView android:id="@+id/imageview"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+	</ScrollView>
 </LinearLayout>
 

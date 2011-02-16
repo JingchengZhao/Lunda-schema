@@ -7,6 +7,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -29,15 +30,37 @@ public class Schema extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		image();
+		final SharedPreferences settings = getSharedPreferences("Schema", 0);
+		final SharedPreferences.Editor editor = settings.edit();
+		if(settings.getBoolean("firstRun", true)){
+			changeSchool();
+			changeId();
+			editor.putBoolean("firstRun", false);
+			editor.commit();
+		}
+		else {
+			image();
+		}
 	}
 
+	public ProgressDialog fetchingScheduleProgressDialog = null;
+
 	public void image() {
-		WebView webView = (WebView) findViewById(R.id.webview);
-		WebSettings webSettings = webView.getSettings();
-        webSettings.setSupportZoom(true);
-		webSettings.setBuiltInZoomControls(true); 
-		webView.loadUrl(urlMaker());
+		fetchingScheduleProgressDialog = ProgressDialog.show(this,
+			"Var god vänta...", "Hämtar schemat...", true);
+		new Thread() {
+			public void run() {
+				try{
+					WebView webView = (WebView) findViewById(R.id.webview);
+					WebSettings webSettings = webView.getSettings();
+				    webSettings.setSupportZoom(true);
+					webSettings.setBuiltInZoomControls(true); 
+					webView.loadUrl(urlMaker());
+				} 
+				catch (Exception e) {}	
+			fetchingScheduleProgressDialog.dismiss();
+			}
+		}.start();
 	}
 
 	@Override
@@ -47,131 +70,161 @@ public class Schema extends Activity {
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	final SharedPreferences settings = getSharedPreferences("Schema", 0);
-    final SharedPreferences.Editor editor = settings.edit();
-		switch (item.getItemId()) {
-		case R.id.changeSchool:
-			final CharSequence[] schools = {"Katte", "Polhem", "Spyken", "Vipan"};
-			AlertDialog.Builder chooseSchool = new AlertDialog.Builder(this);
-			chooseSchool.setTitle("Välj skola");
-			chooseSchool.setItems(schools, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int school) {
-						if(school==0) {
-							editor.putInt("school", 0);
-							editor.commit();
-							image();
-						}
-						else if(school==1) {
-							editor.putInt("school", 1);
-							editor.commit();
-							image();
-						}
-						else if(school==2) {
-							editor.putInt("school", 2);
-							editor.commit();
-							image();
-						}
-						else if(school==3) {
-							Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
-						}
-					}
-				});
-			chooseSchool.show();
-			return true;
-		case R.id.changePass:
-			final EditText passwordEditInput = new EditText(this);
-			AlertDialog.Builder changePass = new AlertDialog.Builder(this);
-			changePass.setTitle("Byt lösenord");
-			changePass.setMessage("Inget kommer hända");
-			changePass.setView(passwordEditInput);
-			changePass.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-					}
-				});
-			changePass.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-					}
-				});
-			changePass.show();
-			return true;
-		case R.id.changeId:
-			final EditText idEditInput = new EditText(this);
-			AlertDialog.Builder changeId = new AlertDialog.Builder(this);
-			changeId.setTitle("Byt ID");
-			changeId.setMessage("YYMMDD-NNNN");
-			changeId.setView(idEditInput);
-			changeId.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						String idSettingValue = idEditInput.getText().toString();
-						editor.putString("id", idSettingValue + "|h%C3%B6stkyla");
+	public void changeSchool() {
+		final SharedPreferences settings = getSharedPreferences("Schema", 0);
+		final SharedPreferences.Editor editor = settings.edit();
+		final CharSequence[] schools = {"Katte", "Polhem", "Spyken", "Vipan"};
+		AlertDialog.Builder chooseSchool = new AlertDialog.Builder(this);
+		chooseSchool.setTitle("Välj skola");
+		chooseSchool.setItems(schools, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int school) {
+					if(school==0) {
+					editor.putInt("school", 0);
 						editor.commit();
 						image();
 					}
-				});
-			changeId.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
+					else if(school==1) {
+						editor.putInt("school", 1);
+					editor.commit();
+						image();
 					}
-				});
+					else if(school==2) {
+						editor.putInt("school", 2);
+					editor.commit();
+						image();
+					}
+					else if(school==3) {
+						Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+		chooseSchool.show();
+	}
 
-			changeId.show();
+	public void changePass() {
+		final SharedPreferences settings = getSharedPreferences("Schema", 0);
+		final SharedPreferences.Editor editor = settings.edit();
+		final EditText passwordEditInput = new EditText(this);
+		AlertDialog.Builder changePass = new AlertDialog.Builder(this);
+		changePass.setTitle("Byt lösenord");
+		changePass.setMessage("Inget kommer hända");
+		changePass.setView(passwordEditInput);
+		changePass.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+				}
+			});
+		changePass.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+				}
+			});
+		changePass.show();
+	}
+
+	public void changeId() {
+		final SharedPreferences settings = getSharedPreferences("Schema", 0);
+		final SharedPreferences.Editor editor = settings.edit();
+		final EditText idEditInput = new EditText(this);
+		AlertDialog.Builder changeId = new AlertDialog.Builder(this);
+		changeId.setTitle("Byt ID");
+		changeId.setMessage("YYMMDD-NNNN");
+		changeId.setView(idEditInput);
+		changeId.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String idSettingValue = idEditInput.getText().toString();
+				editor.putString("id", idSettingValue + "|h%C3%B6stkyla");
+				editor.commit();
+				image();
+			}
+		});
+		changeId.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			}
+		});
+		changeId.show();
+	}
+
+	public void changeWeek() {
+		final SharedPreferences settings = getSharedPreferences("Schema", 0);
+		final SharedPreferences.Editor editor = settings.edit();
+		final EditText weekEditInput = new EditText(this);
+		AlertDialog.Builder changeWeek = new AlertDialog.Builder(this);
+		changeWeek.setTitle("Byt Vecka");
+		changeWeek.setMessage("0=Denna veckan");
+		changeWeek.setView(weekEditInput);
+		changeWeek.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String weekSettingValue = weekEditInput.getText().toString();
+				editor.putInt("week", Integer.parseInt(weekSettingValue));
+				editor.commit();
+				image();
+			}
+		});
+		changeWeek.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			}
+		});
+		changeWeek.show();
+	}
+
+	public void changePeriod() {
+		final SharedPreferences settings = getSharedPreferences("Schema", 0);
+		final SharedPreferences.Editor editor = settings.edit();
+		final CharSequence[] periods = {"Använd Veckor", "Period 1", "Period 2"};
+		AlertDialog.Builder choosePeriod = new AlertDialog.Builder(this);
+		choosePeriod.setTitle("Välj period");
+		choosePeriod.setItems(periods, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int period) {
+				if(period == 0) {
+					editor.putInt("period", 0);
+					editor.commit();
+					image();
+				}
+				else if(period == 1) {
+					editor.putInt("period", 1);
+					editor.commit();
+					image();
+				}
+				else if(period == 2) {
+					editor.putInt("period", 2);
+					editor.commit();
+					image();
+				}
+			}
+		});
+		choosePeriod.show();
+	}
+
+	public void about() {
+		AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
+		aboutBuilder.setTitle("Om");
+		aboutBuilder.setMessage("Skapad av Patrik 'Sikevux' Greco\n<sikevux@sikevux.se>");
+		aboutBuilder.setNegativeButton("Tillbaka", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			}
+		});
+		aboutBuilder.show();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.changeSchool:
+			changeSchool();
+			return true;
+		case R.id.changePass:
+			changePass();
+			return true;
+		case R.id.changeId:
+			changeId();
 			return true;
 		case R.id.changeWeek:
-			final EditText weekEditInput = new EditText(this);
-            AlertDialog.Builder changeWeek = new AlertDialog.Builder(this);
-            changeWeek.setTitle("Byt Vecka");
-            changeWeek.setMessage("0=Denna veckan");
-            changeWeek.setView(weekEditInput);
-            changeWeek.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String weekSettingValue = weekEditInput.getText().toString();
-                        editor.putInt("week", Integer.parseInt(weekSettingValue));
-                        editor.commit();
-                        image();
-                    }
-                });
-            changeWeek.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                });
-
-            changeWeek.show();
-            return true;
+			changeWeek();
+			return true;
 		case R.id.changePeriod:
-			final CharSequence[] periods = {"Använd Veckor", "Period 1", "Period 2"};
-			AlertDialog.Builder choosePeriod = new AlertDialog.Builder(this);
-			choosePeriod.setTitle("Välj period");
-			choosePeriod.setItems(periods, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int period) {
-						if(period == 0) {
-							editor.putInt("period", 0);
-							editor.commit();
-							image();
-						}
-						else if(period == 1) {
-							editor.putInt("period", 1);
-							editor.commit();
-							image();
-						}
-						else if(period == 2) {
-							editor.putInt("period", 2);
-							editor.commit();
-							image();
-						}
-					}
-				});
-			choosePeriod.show();
+			changePeriod();
 			return true;
 		case R.id.about:
-			AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
-			aboutBuilder.setTitle("Om");
-			aboutBuilder.setMessage("Skapad av Patrik 'Sikevux' Greco");
-			aboutBuilder.setNegativeButton("Tillbaka", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-					}
-				});
-			aboutBuilder.show();
+			about();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
