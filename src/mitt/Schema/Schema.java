@@ -32,7 +32,6 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -43,6 +42,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.EditText;
@@ -54,7 +55,9 @@ public class Schema extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.getWindow().requestFeature(Window.FEATURE_PROGRESS);
 		setContentView(R.layout.main);
+		getWindow().setFeatureInt( Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON); 
 		final SharedPreferences settings = getSharedPreferences("Schema", 0);
 		final SharedPreferences.Editor editor = settings.edit();
 		if(settings.getBoolean("firstRun", true)){
@@ -68,24 +71,18 @@ public class Schema extends Activity {
 		}
 	}
 
-	public ProgressDialog fetchingScheduleProgressDialog = null;
-
 	public void image() {
-		fetchingScheduleProgressDialog = ProgressDialog.show(this,
-			"Var god vänta...", "Hämtar schemat...", true);
-		new Thread() {
-			public void run() {
-				try{
-					WebView webView = (WebView) findViewById(R.id.webview);
-					WebSettings webSettings = webView.getSettings();
-				    webSettings.setSupportZoom(true);
-					webSettings.setBuiltInZoomControls(true); 
-					webView.loadUrl(urlMaker());
-				} 
-				catch (Exception e) {}	
-			fetchingScheduleProgressDialog.dismiss();
+		final Activity progressBarActivity = this;
+		WebView webView = (WebView) findViewById(R.id.webview);
+		webView.setWebChromeClient(new WebChromeClient() {
+			public void onProgressChanged(WebView webview, int progress) {
+				progressBarActivity.setProgress(progress * 100);
 			}
-		}.start();
+		});
+		WebSettings webSettings = webView.getSettings();
+		webSettings.setSupportZoom(true);
+		webSettings.setBuiltInZoomControls(true); 
+		webView.loadUrl(urlMaker());
 	}
 
 	@Override
@@ -119,14 +116,14 @@ public class Schema extends Activity {
 						image();
 					}
 					else if(school==3) {
-						Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(), "Malia mig länken till schemat så det kan funka här :)", Toast.LENGTH_SHORT).show();
 					}
 				}
 			});
 		chooseSchool.show();
 	}
 
-   	public void changePass() {
+	public void changePass() {
 		final SharedPreferences settings = getSharedPreferences("Schema", 0);
 		final SharedPreferences.Editor editor = settings.edit();
 		final EditText passwordEditInput = new EditText(this);
@@ -138,7 +135,7 @@ public class Schema extends Activity {
 				public void onClick(DialogInterface dialog, int whichButton) {
 				}
 			});
-		changePass.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		changePass.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
 				}
 			});
@@ -151,7 +148,7 @@ public class Schema extends Activity {
 		final EditText idEditInput = new EditText(this);
 		AlertDialog.Builder changeId = new AlertDialog.Builder(this);
 		changeId.setTitle("Byt ID");
-		changeId.setMessage("YYMMDD-NNNN");
+		changeId.setMessage("Skriv in något av följande\n-Personnummer (YYMMDD-NNNN)\n-Klass\n-Lärarsignatur");
 		changeId.setView(idEditInput);
 		changeId.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
@@ -161,7 +158,7 @@ public class Schema extends Activity {
 				image();
 			}
 		});
-		changeId.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		changeId.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 			}
 		});
@@ -184,7 +181,7 @@ public class Schema extends Activity {
 				image();
 			}
 		});
-		changeWeek.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		changeWeek.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 			}
 		});
@@ -222,7 +219,7 @@ public class Schema extends Activity {
 	public void about() {
 		AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
 		aboutBuilder.setTitle("Om");
-		aboutBuilder.setMessage("Skapad av Patrik 'Sikevux' Greco\n<sikevux@sikevux.se>");
+		aboutBuilder.setMessage("Skapad av Patrik 'Sikevux' Greco\n<sikevux@sikevux.se>\nGillar du appen så går jag i NV1C på Katte.\nSurprise me ^_^");
 		aboutBuilder.setNegativeButton("Tillbaka", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 			}
@@ -234,7 +231,7 @@ public class Schema extends Activity {
 		AlertDialog.Builder licenseBuilder = new AlertDialog.Builder(this);
 		licenseBuilder.setTitle("License");
 		licenseBuilder.setMessage("Copyright 2011 Patrik Greco All rights reserved.\nUse is subject to license terms.\nA copy of the license can be retrived at http://dev.sikevux.se/LICENSE.txt");
-		licenseBuilder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+		licenseBuilder.setNegativeButton("Tillbaka", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 			}
 		});
@@ -347,36 +344,4 @@ public class Schema extends Activity {
 			return null;
 		}
 	}
-	/*	
-	private void getIt(String url) {
-		try {
-			InputStream inputStream = (InputStream) new URL(url).getContent();
-			File root = Environment.getExternalStorageDirectory();
-			String localFilePath = root.getPath() + "/Schema.png";
-			FileOutputStream fileOutputStream = new FileOutputStream(localFilePath, false);
-			OutputStream outputStream = new BufferedOutputStream(fileOutputStream);
-			byte[] buffer = new byte[1024];
-			int byteRead = 0;
-
-			while ((byteRead = is.read(buffer)) != -1) {
-				outputStream.write(buffer, 0, byteRead);
-			}
-
-			fileOutputStream.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-			Drawable draw = Drawable.createFromStream(inputStream, "src name");
-			return draw;
-		}
-
-
-		catch (Exception exception) {
-			System.out.println("Exc=" + exception);
-			return null;
-			}
-	*/
-
 }
-
