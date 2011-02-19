@@ -116,7 +116,9 @@ public class Schema extends Activity {
 						image();
 					}
 					else if(school==3) {
-						Toast.makeText(getApplicationContext(), "Malia mig länken till schemat så det kan funka här :)", Toast.LENGTH_SHORT).show();
+						editor.putInt("school", 3);
+					editor.commit();
+						image();
 					}
 				}
 			});
@@ -284,6 +286,9 @@ public class Schema extends Activity {
 		}
 		else if(school == 2) {
 			siteStringBuilder.append("26900");
+		}
+		else if(school == 3) {
+			siteStringBuilder.append("27750");
 		}
 		siteStringBuilder.append("&id=");
 		siteStringBuilder.append(settings.getString("id", "{5363F05C-349F-4AF9-9AA9-55A48A3B628D}|h%C3%B6stkyla"));
