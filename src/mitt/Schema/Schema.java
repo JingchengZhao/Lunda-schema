@@ -152,7 +152,7 @@ public class Schema extends Activity {
 		final EditText idEditInput = new EditText(this);
 		AlertDialog.Builder changeId = new AlertDialog.Builder(this);
 		changeId.setTitle("Byt ID");
-		changeId.setMessage("Skriv in något av följande\n-Personnummer (YYMMDD-NNNN)\n-Klass\n-Lärarsignatur");
+		changeId.setMessage("Skriv in något av följande\n-Personnummer (YYMMDD-NNNN)\n-Klass\n-Lärarsignatur\n-Sal");
 		changeId.setView(idEditInput);
 		changeId.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
