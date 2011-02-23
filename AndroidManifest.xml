@@ -23,8 +23,8 @@ Use is subject to license terms.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="mitt.Schema"
-	android:versionCode="7"
-	android:versionName="3.1-alpha4">
+	android:versionCode="8"
+	android:versionName="3.1-alpha5">
 	<uses-sdk android:minSdkVersion="4" 
 		android:targetSdkVersion="6"/>
 	<uses-permission android:name="android.permission.INTERNET" />

@@ -33,9 +33,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
@@ -218,6 +220,12 @@ public class Schema extends Activity {
 		choosePeriod.show();
 	}
 
+	public void donate() {
+		Uri uri = Uri.parse("market://details?id=org.sikevux.Donations");
+		Intent it  = new Intent(Intent.ACTION_VIEW,uri);
+		startActivity(it);
+	}
+
 	public void about() {
 		AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
 		aboutBuilder.setTitle("Om");
@@ -265,6 +273,9 @@ public class Schema extends Activity {
 			return true;
 		case R.id.about:
 			about();
+			return true;
+		case R.id.donate:
+			donate();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
