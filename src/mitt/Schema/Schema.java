@@ -50,8 +50,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 public class Schema extends Activity {
 	@Override
@@ -87,10 +91,23 @@ public class Schema extends Activity {
 		webView.loadUrl(urlMaker());
 	}
 
+	/*	@Override
+	public boolean onOptionsMenuClosed(Menu menu) {
+		LinearLayout linear = new LinearLayout(this);
+		linear.setVisibility(8);
+		return true;
+		}*/
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
+		/*		LinearLayout linear = new LinearLayout(this);
+		linear.setOrientation(LinearLayout.VERTICAL);
+		TextView text = new TextView(this);
+		text.setText("Scemat som visas just nu är:");
+		linear.addView(text);
+		setContentView(linear);*/
 		return true;
 	}
 
@@ -180,9 +197,21 @@ public class Schema extends Activity {
 		changeWeek.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String weekSettingValue = weekEditInput.getText().toString();
-				editor.putInt("week", Integer.parseInt(weekSettingValue));
-				editor.commit();
-				image();
+						if(intSanitizer(weekSettingValue)) {
+							int intWeekSettingValue = Integer.parseInt(weekSettingValue);
+							if(intWeekSettingValue < 53 && intWeekSettingValue >= 0) {
+								editor.putInt("week", intWeekSettingValue);
+								editor.commit();
+								image();
+							}
+							else {
+	   							Toast.makeText(getApplicationContext(), "Hur många veckor sa du att det fanns per år nu igen?", Toast.LENGTH_SHORT).show();
+							}
+						}
+						else {
+							Toast.makeText(getApplicationContext(), "Veckor inehåller bara positiva heltal. Try. Try Again.", Toast.LENGTH_SHORT).show();
+						}
+
 			}
 		});
 		changeWeek.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
@@ -191,6 +220,15 @@ public class Schema extends Activity {
 		});
 		changeWeek.show();
 	}
+
+			public boolean intSanitizer(String number) {
+				try {
+					Integer.parseInt(number);
+				} catch(NumberFormatException numFormExc) {
+					return false;
+				}
+				return true;
+			}
 
 	public void changePeriod() {
 		final SharedPreferences settings = getSharedPreferences("Schema", 0);
